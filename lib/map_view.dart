@@ -1,247 +1,211 @@
 import 'package:flutter/material.dart';
-import 'rating_bar.dart';
+import 'detail_view.dart';
+
 class MapView extends StatelessWidget{
-
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    return ListView(
-      children: <Widget>[
-        _createUpperTitle(context),
-            _createUpperImage(context),
-            SizedBox(
-                height: 5
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left:8.0),
-              child: UpperRating(distance: '410m'),
-            ),
-        Divider(
-          color: Colors.grey[500],
-          height: 5,
-        ),
-        _overviewDetail(context),
-        SizedBox(
-          height: 10,
-        ),
-        _belowDetail(context),
-      ],
-    );
-  }
-}
-class UpperRating extends StatelessWidget{
-  final String distance;
-  const UpperRating({
-    this.distance});
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.grey[100],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: Stack(
         children: <Widget>[
-          Row(
-            children: <Widget>[
-              Icon(Icons.location_on,color: Colors.purple,size: 16),
-              SizedBox(
-                width: 5,
-              ),
-              Text(distance ,style: TextStyle(
-                  fontSize: 13
-              ),),
-            ],
-          ),
-          SizedBox(height: 2),
-          Row(
-            children: <Widget>[
-              FormField<int>(
-                initialValue: 3,
-                autovalidate: true,
-                builder: (state){
-                  return StarRating(
-                      onChanged: state.didChange,
-                      value : state.value
-                  );
-                },
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Text('Đánh giá')
-            ],
-          ),
+          Positioned(
+          top: 20.0,
+            child:   _searchBar(),
+      ),
+          _upperButton(context),
+          _bottomButton()
         ],
       ),
+      bottomNavigationBar: _bottomBar(context) ,
 
     );
   }
+}
 
+_searchBar() {
+  return Column(
+    children: <Widget>[
+         Padding(
+          padding: const EdgeInsets.fromLTRB(12, 20, 0, 0),
+          child: Card(
+            elevation: 3,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Container(
+              height: 50,
+              width: 330,
+               child: Row(
+                 children: <Widget>[
+                   _menuButton(),
+                   SizedBox(
+                     width: 50,
+                   ),
+                   Expanded(
+                     flex: 1,
+                     child: _searchField() ,
+                   ),
+                   _voiceButton(),
+                   VerticalDivider(
+                     width: 1,
+                     color:Colors.grey[600]
+                   ),
+                   _directionButton(),
+
+                 ],
+               ),
+             ),
+            ) ,
+        ),
+    ],
+  );
 }
-class BelowDetail extends StatelessWidget{
-  final String title;
-  final String  description;
-  final String distance;
-  const BelowDetail({this.title,this.description,this.distance});
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(title,style: TextStyle(
-            fontWeight: FontWeight.w700,
-            fontSize: 16
-        ),
-        ),
-        Text(description,style: TextStyle(
-            fontSize: 14
-        ),
-        ),
-        UpperRating(
-          distance: distance,
-        ),
-      ],
-    );
-  }
+
+_menuButton(){
+  return IconButton(
+    icon: Icon(
+      Icons.menu,
+      color: Colors.purple,
+      size: 35,
+    ),
+    onPressed: null,
+    splashColor: Colors.transparent,
+  );
 }
-_createUpperTitle(context){
+
+_searchField(){
   return Container(
-    height: 40,
-    width:  MediaQuery.of(context).size.width,
-    child: Padding(
-      padding: const EdgeInsets.only(left: 8.0),
+    alignment: Alignment.centerLeft,
+    child: TextField(
+      autofocus: false,
+      decoration: InputDecoration(
+          icon:Icon(Icons.search,color: Colors.grey),
+          border: InputBorder.none,
+          hintText: 'Tìm kiếm'),
+      onChanged: null,
+
+    ),
+  );
+}
+
+_voiceButton(){
+  return IconButton(
+    icon: Icon(
+      Icons.keyboard_voice,
+      color: Colors.purple,
+      size: 35,
+    ),
+    onPressed: null,
+    splashColor: Colors.transparent,
+  );
+}
+
+_directionButton(){
+  return IconButton(
+    icon: Icon(
+      Icons.directions,
+      color: Colors.purple,
+      size: 35,
+    ),
+    onPressed: null,
+    splashColor: Colors.transparent,
+  );
+}
+
+_upperButton(context){
+  return Positioned(
+    right: 10.0,
+    top:100,
+    child: FloatingActionButton(
+      child: Icon(
+          Icons.layers
+      ),
+      mini: true,
+      backgroundColor: Colors.purple,
+      onPressed: (){},
+      heroTag: "layer_hero",
+    ),
+  );
+}
+
+_bottomButton(){
+  return Positioned(
+    right: 10.0,
+    bottom: 10.0,
+    child: FloatingActionButton(
+      child: Icon(
+          Icons.near_me
+      ),
+      mini: true,
+      backgroundColor: Colors.purple,
+      onPressed: (){},
+      heroTag: "direction_hero",
+    ),
+  );
+}
+
+_bottomBar(context) {
+  return Container(
+    height: 50,
+    child: BottomAppBar(
       child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
-          Text('DANH LAM THẮNG CẢNH HUẾ',style:
-            TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-              color: Colors.white
-            ),),
-          SizedBox(width: 5,),
-          Icon(Icons.keyboard_arrow_down,
-            size: 28,
-            color: Colors.white,)
-        ],
-      ),
-    ),
-    color: Colors.purple,
-  );
-}
-_createUpperImage(context) {
-  return Container(
-    height: MediaQuery.of(context).size.height/3-17,
-    width:  MediaQuery.of(context).size.width ,
-    child: Image(
-        image: AssetImage('imgs/danhlam.jpg'),
-    ),
-  );
-}
-_overviewDetail(context){
-  return Container(
-    decoration: BoxDecoration(
-        color: Colors.grey[100]
-    ),
-    child: Padding(
-      padding: const EdgeInsets.only(left: 8.0),
-      child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text('Tham quan Hoàng thành Huế',
-              style: TextStyle(
-              fontWeight: FontWeight.w700,
-              fontSize: 16
-                  ),
-                ),
-              SizedBox(
-                height: 2,
-              ),
-              Text('Hoàng thành Huế là vòng thành thứ 2 bên trong Kinh thành Huế, '
-                  'có chức năng bảo vệ các cung điện quan trọng nhất của '
-                  'triều đình Huế, các miếu thờ tổ tiên nhà Nguyễn và bảo vệ, '
-                  'Tử Cấm thành Huế. Lịch sử Hoàng thành Huế '
-                  'được xây dựng từ năm...',
-              style: TextStyle(
-                fontSize: 12,
-                wordSpacing: 1
-              ),)
-            ],
-      ),
-    ),
-  );
-}
-_belowDetail(context){
-  return Container(
-    decoration: BoxDecoration(
-        color: Colors.grey[100]
-    ),
-    child: Padding(
-      padding: const EdgeInsets.only(left:8.0),
-      child: Column(
-        children: <Widget>[
-          Row(
-            children: <Widget>[
-              Image(
-                image: AssetImage('imgs/damchuon.jpg'),
-                height: MediaQuery.of(context).size.height/7,
-                width: 120,
-              ),
-              SizedBox(
-                width: 5,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 8),
-                child: BelowDetail(
-                  title: 'Đầm Chuồn xứ Huế',
-                  description: 'Hương Quán - Phú An - Phú Vang',
-                  distance: '20km',
-                ),
-              ),
-            ],
+          InkWell(
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(builder: (context)=> new DetailView() ));
+            },
+            child: Image.asset(
+              'imgs/btn1.PNG',
+              width: 40,
+              height: 40,
+              fit: BoxFit.cover,
+            ),
           ),
-          Row(
-            children: <Widget>[
-              Image(
-                image: AssetImage('imgs/buonlang.jpg'),
-                height: MediaQuery.of(context).size.height/7,
-                width: 120,
-              ),
-              SizedBox(
-                width: 5,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 8),
-                child: BelowDetail(
-                  title: 'Buôn làng người Pako - Huế',
-                  description: 'Hồng Vân - A lưới - TT Huế',
-                  distance: '40km',
-                ),
-              ),
-            ],
+          InkWell(
+            onTap: () {
+            },
+            child: Image.asset(
+              'imgs/btn2.PNG',
+              width: 40,
+              height: 40,
+              fit: BoxFit.cover,
+            ),
           ),
-          Row(
-            children: <Widget>[
-              Image(
-                image: AssetImage('imgs/thapco.jpg'),
-                height: MediaQuery.of(context).size.height/7,
-                width: 120,
-              ),
-              SizedBox(
-                width: 5,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 8),
-                child: BelowDetail(
-                  title: 'Tháp cổ Phú Diên - Huế',
-                  description: 'Phú Diên - Phú An - TT Huế',
-                  distance: '30km',
-                ),
-              ),
-            ],
+          InkWell(
+            onTap: () {
+            },
+            child: Image.asset(
+              'imgs/btn3.PNG',
+              width: 40,
+              height: 40,
+              fit: BoxFit.cover,
+            ),
+          ),
+          InkWell(
+            onTap: () {
+            },
+            child: Image.asset(
+              'imgs/btn4.PNG',
+              width: 40,
+              height: 40,
+              fit: BoxFit.cover,
+            ),
+          ),
+          InkWell(
+            onTap: () {
+            },
+            child: Image.asset(
+              'imgs/btn5.PNG',
+              width: 40,
+              height: 40,
+              fit: BoxFit.cover,
+            ),
           ),
         ],
       ),
+
     ),
   );
 }

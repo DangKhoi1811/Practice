@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'detail_view.dart';
 import 'map_view.dart';
 void main() => runApp(MyApp());
 
